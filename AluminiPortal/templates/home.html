@@ -1,0 +1,22 @@
+
+
+{% extends 'base.html' %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Site{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    
+    {% block content %}
+    <h1>Welcome to KLlumni</h1>
+
+<a href="{% url 'newpost' %}"><button type="button" class="btn btn-success">New Post</button></a>
+<h1>New Post: </h1>
+<p> {{para}} </p>
+
+    {% endblock %}
+</body>
+</html>
