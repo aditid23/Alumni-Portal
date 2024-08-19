@@ -1,0 +1,66 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    position: fixed; /* This ensures the sidebar stays fixed on the left */
+    height: 100%;
+    top: 0; /* Positioning it at the top */
+    left: 0; /* Positioning it at the left */
+    overflow-y: auto; /* To make sure it scrolls if the content overflows */
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.main-content {
+    margin-left: 270px; /* Adjust this margin to account for the fixed sidebar width */
+    padding: 20px;
+    flex-grow: 1;
+    background-color: #E0FFFF; /* Light background for visibility */
+    min-height: 100vh; /* Ensures that the content area is at least the full height of the viewport */
+}
