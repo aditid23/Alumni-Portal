@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <title>Styled Navbar Example</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/KLH_Logo.png' %}" alt="Logo" width="100" height="60" class="d-inline-block">
+      KL-Lumni
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <img src="{% static 'images/image.png' %}" alt="Home" width="40" height="20" class="d-inline-block">
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <img src="{% static 'images/posts.png' %}" alt="Posts" width="40" height="20" class="d-inline-block">
+          <a class="nav-link" href="{% url 'posts' %}">My Posts</a>
+        </li>
+        
+        <li class="nav-item">
+          <img src="{% static 'images/notificaton(1)(1)(1)(1).png' %}" alt="Notifications" width="40" height="30" class="d-inline-block"></a>   
+          <a class="nav-link" href="{% url 'notifications' %}">Notifications{% load static %}
+            
+        </li>
+        <li class="nav-item">
+          
+          <img src="{% static 'images/profile.png' %}" alt="Profile" width="40" height="20" class="d-inline-block">
+          <a class="nav-link" href="{% url 'profile' %}">My Profile{% load static %}</a>
+        </li>
+        <li class="nav-item">
+          <img src="{% static 'images/settings.png' %}" alt="Settings" width="40" height="20" class="d-inline-block">
+          <a class="nav-link" href="{% url 'settings' %}">Settings{% load static %}
+          </a>
+        </li> 
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+</body>
+</html>

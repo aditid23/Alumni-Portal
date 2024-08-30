@@ -1,0 +1,49 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff!important;
+    margin: 0;
+}
+
+h1 {
+    color: #000000;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.navbar {
+    background-color: #464e4e !important; 
+}
+
+.navbar a {
+    color: rgb(255, 255, 255) !important; 
+    text-decoration: none; 
+    padding: 10px; 
+    display: inline-block; 
+}
+
+.navbar a:hover {
+    color: #000000 !important; /* Change text color on hover */
+}
+
+  
