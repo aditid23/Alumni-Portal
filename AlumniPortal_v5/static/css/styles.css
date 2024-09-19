@@ -1,0 +1,52 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff!important;
+    margin: 0;
+}
+
+h1 {
+    color: #000000;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid;
+    border-radius: 4px;
+}
+
+button {
+    position: absolute; /* Set positioning type */
+    top: 100px; /* Distance from the top */
+    right: 20px; /* Distance from the right */
+    padding: 10px 20px; /* Button padding */
+    background-color: #007BFF; /* Button color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+
+button:hover {
+    background-color: #45a049;
+}
+
+.navbar {
+    background-color: #464e4e !important; 
+}
+
+.navbar a {
+    color: rgb(255, 255, 255) !important; 
+    text-decoration: none; 
+    padding: 10px; 
+    display: inline-block; 
+}
+
+.navbar a:hover {
+    color: #000000 !important; /* Change text color on hover */
+}
+
+  

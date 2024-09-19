@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>My Profile Page</h1>
+<a href="{% url 'newpost' %}"><button type="button" class="btn btn-success">New Post</button></a>
+<h3>My posts:</h3>
+    <p id="displayArea"></p>  
+    
+    <script>
+ 
+        const list = JSON.parse('{{ para|safe }}');  
+
+        const formattedList = list.join('<br>');
+
+        document.getElementById('displayArea').innerHTML = formattedList;
+    </script>
+{% endblock %}
