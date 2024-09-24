@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <h1>My Profile Page</h1>
 <a href="{% url 'newpost' %}"><button type="button" class="btn btn-success" style="background-color: #3e423e; color: white; padding: 10px 20px; 
     border: none; border-radius: 4px; text-decoration: none; 
     display: inline-block; cursor: pointer; right: 10px; top: 100px; 
     position: absolute; outline: none;">New Post</button></a>
+
 <h3>My posts:</h3>
     <p id="displayArea"></p>  
     
@@ -16,4 +18,6 @@
 
         document.getElementById('displayArea').innerHTML = formattedList;
     </script>
+
+
 {% endblock %}

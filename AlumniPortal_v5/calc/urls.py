@@ -8,5 +8,8 @@ path('dashboard/',views.dashboard, name='dashboard'),
 path('posts/', views.posts, name='posts'),
 path('profile/',views.profile, name='profile'),
 path('settings/',views.settings, name='settings'),
-path('notifications/',views.notifications, name='notifications')
+path('notifications/',views.notifications, name='notifications'),
+path('register/',views.registerPage, name='register'),
+path('login/',views.loginPage, name='login'),
+path('logout/',views.logoutPage, name='logout'),
 ]

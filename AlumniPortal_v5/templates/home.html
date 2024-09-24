@@ -20,7 +20,7 @@
 </a>
     <h1>New Post: </h1>
     <p id="displayArea"></p>  
-
+    <a href="{% url 'logout' %}"><button type="button"  class="btn btn-success">Logout</button></a>
     <script>
        
         const list = JSON.parse('{{ para|safe }}'); 
@@ -31,4 +31,6 @@
     </script>
     {% endblock %}
 </body>
+
 </html>
+
