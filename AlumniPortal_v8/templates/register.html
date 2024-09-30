@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+
+        body::before {
+            content: "";
+            background-image: url("{% static 'images/campus.png' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+
+        form {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 500px;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        input[type="text"], input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #3e423e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1e1f1e;
+        }
+
+        .btn-success {
+            padding: 10px 20px;
+            background-color: #3e423e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .btn-success:hover {
+            background-color: #1e1f1e;
+        }
+    </style>
+</head>
+<body>
+
+<form method="POST" action="">
+    <h1>Create User</h1>
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" name="Create User" value="Create User">
+    <a href="{% url 'login' %}">
+        <button type="button" class="btn-success">Login Page</button>
+    </a>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+{% load crispy_forms_tags %}
+<div class="settings-container">
+    <h2>Settings</h2>
+
+    <!-- Profile Update Form -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend>Edit Profile</legend>
+            {{ u_form|crispy }}
+        </fieldset>
+
+        <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="img-thumbnail" style="width: 150px;">
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+
+    <hr>
+
+    <!-- Password Change Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend>Change Password</legend>
+            {{ p_form|crispy }}
+        </fieldset>
+        <button type="submit" class="btn btn-danger">Change Password</button>
+    </form>
+</div>
