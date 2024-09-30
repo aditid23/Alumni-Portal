@@ -1,0 +1,11 @@
+<h2>Edit Profile</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ u_form.as_p }}
+    {{ p_form.as_p }}
+    <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="img-thumbnail" style="width: 150px;">
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+
+
