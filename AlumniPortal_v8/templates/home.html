@@ -34,10 +34,26 @@
             top: 100px;
             outline: none;
         }
+
+        /* Style for the post box */
+        .post-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .post-box p {
+            margin: 0;  /* Remove default margin inside the box */
+        }
     </style>
 </head>
 <body>
-    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     {% block content %}
     <h1>Welcome to KLlumni</h1>
     <a href="{% url 'newpost' %}"><button type="button" class="btn btn-success" style="background-color: #3e423e; color: white; padding: 10px 20px; 
@@ -46,11 +62,16 @@
         position: absolute; outline: none;">New Post</button></a>
     
     <h1>New Post:</h1>
-    <p id="displayArea"></p>  
+    <div id="displayArea"></div>  <!-- Changed this to a div -->
 
     <script>
-        const list = JSON.parse('{{ para|safe }}'); 
-        const formattedList = list.join('<br>');
+        const list = JSON.parse('{{ para|safe }}');
+        let formattedList = '';
+
+        list.forEach((item) => {
+            formattedList += `<div class="post-box"><p>${item}</p></div>`;
+        });
+
         document.getElementById('displayArea').innerHTML = formattedList;
     </script>
     {% endblock %}

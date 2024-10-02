@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from .models import Profile
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm
+
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
@@ -13,7 +15,11 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['image', 'bio', 'location', 'date_of_birth']
 
+class CreateUserForm(UserCreationForm):
+ class Meta:
+    model=User
+    fields=["username","email","password1","password2"]
+
 class UserPasswordChangeForm(PasswordChangeForm):
-    class Meta:
-        model = User
-        fields = ['old_password', 'new_password1', 'new_password2']
+    # Add any customizations here
+    pass

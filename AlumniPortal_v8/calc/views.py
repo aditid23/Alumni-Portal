@@ -9,7 +9,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile
 from .forms import UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth import update_session_auth_hash
-from .forms import UserUpdateForm, ProfileUpdateForm, UserPasswordChangeForm
+from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import CreateUserForm
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 
@@ -94,26 +96,41 @@ def profile(request):
 
 
 @login_required(login_url='login')
-def settings(request):
- return render(request,'settings.html')
-
-
-@login_required(login_url='login')
 def notifications(request):
  return render(request,'notifications.html')
 
 
-def registerPage(request):
-    form=UserCreationForm()
-    if request.method=="POST":
-        form=UserCreationForm(request.POST)
+
+def register(request):
+    # If the user is already authenticated, redirect them to login or another page
+    if request.user.is_authenticated:
+        return redirect('login')  # Redirect to login page if already authenticated
+    
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Your account has been created! You can now log in.')
             return redirect('login')
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'register.html', {'form': form})
+
+
+def create_user(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'User created successfully!')
+            return redirect('login')  # Redirect to the login page or any other page
         else:
-            messages.success(request,"Password does not follow the rules")
-    context={'form':form}
-    return render(request, 'register.html', context)
+            messages.error(request, 'Error creating user. Please correct the errors below.')
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'your_template_name.html', {'form': form})   
 
 
 def loginPage(request):
@@ -174,25 +191,26 @@ def settings(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        password_form = UserPasswordChangeForm(request.user, request.POST)
-        
-        if u_form.is_valid() and p_form.is_valid() and password_form.is_valid():
+        password_form = PasswordChangeForm(user=request.user, data=request.POST)
+
+        if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
+            messages.success(request, f'Your account has been updated!')
+            return redirect('settings')
+        
+        if password_form.is_valid():
             password_form.save()
-            # Important: Update the session with the new password
-            update_session_auth_hash(request, password_form.user)
-            messages.success(request, 'Your profile and password have been updated!')
-            return redirect('settings')  # Redirect to the settings page
+            messages.success(request, 'Your password has been updated!')
+            return redirect('settings')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
-        password_form = UserPasswordChangeForm(request.user)
+        password_form = PasswordChangeForm(user=request.user)
 
     context = {
         'u_form': u_form,
         'p_form': p_form,
-        'password_form': password_form
+        'password_form': password_form,
     }
-    
     return render(request, 'users/settings.html', context)

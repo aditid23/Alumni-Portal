@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <style>
+        /* your existing CSS */
         body {
             margin: 0;
             height: 100vh;
@@ -36,7 +37,6 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            text-align: center;
             width: 500px;
         }
 
@@ -46,58 +46,98 @@
             text-align: center;
         }
 
+        label {
+            text-align: left;
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
         input[type="text"], input[type="password"], input[type="email"] {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
+            margin-bottom: 20px;
             border-radius: 5px;
             border: 1px solid #ccc;
             font-size: 16px;
         }
 
-        input[type="submit"] {
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button[type="submit"], .btn-success {
             padding: 10px 20px;
             background-color: #3e423e;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
             font-size: 16px;
         }
 
-        input[type="submit"]:hover {
+        button[type="submit"]:hover, .btn-success:hover {
             background-color: #1e1f1e;
         }
 
-        .btn-success {
-            padding: 10px 20px;
-            background-color: #3e423e;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            text-decoration: none;
-            font-size: 16px;
+        p {
+            text-align: center;
         }
 
-        .btn-success:hover {
-            background-color: #1e1f1e;
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        .alert-danger p {
+            margin: 0;
         }
     </style>
 </head>
 <body>
+    <form method="POST" action="">
+        <h1>Register Page</h1>
+        {% csrf_token %}
 
-<form method="POST" action="">
-    <h1>Create User</h1>
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" name="Create User" value="Create User">
-    <a href="{% url 'login' %}">
-        <button type="button" class="btn-success">Login Page</button>
-    </a>
-</form>
+        <!-- Username -->
+        <label for="id_username">{{ form.username.label }}</label>
+        {{ form.username }}
 
+        <!-- Email -->
+        <label for="id_email">{{ form.email.label }}</label>
+        {{ form.email }}
+
+        <!-- Password1 -->
+        <label for="id_password1">{{ form.password1.label }}</label>
+        {{ form.password1 }}
+
+        <!-- Password2 -->
+        <label for="id_password2">{{ form.password2.label }}</label>
+        {{ form.password2 }}
+
+        <!-- Button container to center the register button -->
+        <div class="button-container">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+        
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field, errors in form.errors.items %}
+                    <strong>{{ field }}:</strong>
+                    {% for error in errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% for message in messages %}
+            <p id="messages">{{ message }}</p>
+        {% endfor %}
+
+        <!-- Link to the login page -->
+        <p>Already registered? <a href="{% url 'login' %}">Go to login</a></p>
+    </form>
 </body>
 </html>
