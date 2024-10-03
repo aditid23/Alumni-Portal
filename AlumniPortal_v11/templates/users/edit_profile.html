@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Edit Profile{% endblock %}</title>
+    <style>
+        /* Container for the form */
+        .edit-profile-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Heading styling */
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 30px;
+        }
+
+        /* Form input styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        form input, form select, form textarea {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* CSRF token and error messages handling */
+        .errorlist {
+            color: red;
+            margin: 0 0 15px 0;
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background-color: #3e423e;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            display: block; /* Changed to block for centering */
+            margin: 20px auto; /* Centering the button */
+            text-align: center; /* Centering the text inside the button */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .btn-primary:hover {
+            background-color: #1e1f1e;
+        }
+
+        /* Back button styling */
+        .btn-back {
+            background-color: #3e423e; /* Change color to #3e423e */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s;
+            display: inline-block; /* Display as inline block */
+            margin: 20px auto; /* Center it and add margin */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .btn-back:hover {
+            background-color: #1e1f1e; /* Change hover color if desired */
+        }
+
+        /* Profile image styling */
+        .img-thumbnail {
+            display: block;
+            margin: 20px auto;
+            width: 150px;
+            border-radius: 50%;
+            border: 2px solid #3e423e;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .edit-profile-container {
+                padding: 15px;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Profile button outside of the container -->
+    <a href="{% url 'profile' %}" class="btn-back" role="button">Back to Profile</a>
+
+    <div class="edit-profile-container">
+        <h2>Edit Profile</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ u_form.as_p }}
+            {{ p_form.as_p }}
+
+            <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="img-thumbnail">
+
+            <button type="submit" class="btn-primary">Update Profile</button> <!-- Adjusted class -->
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Login Page{% endblock %}</title>
+    {% load static %}
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        body::before {
+            content: "";
+            background-image: url("{% static 'images/campus.png' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 300px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #3e423e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1e1f1e;
+        }
+
+        .btn-success {
+            padding: 10px 20px;
+            background-color: #3e423e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .btn-success:hover {
+            background-color: #1e1f1e;
+        }
+
+        #messages {
+            color: red;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Login</h1>
+<form method="POST" action="">
+    {% csrf_token %}
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" placeholder="Enter Username" required>
+    
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" placeholder="Enter Password" required>
+    
+    <input type="submit" name="Login" value="Login">
+</form>
+
+{% for message in messages %}
+    <p id="messages">{{ message }}</p>
+{% endfor %}
+
+<a href="{% url 'register' %}"><button type="button" class="btn-success">Sign Up / Register</button></a>
+
+</body>
+</html>

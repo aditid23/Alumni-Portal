@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Create Post{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #3e423e; 
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px; 
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1e1f1e; 
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+    <form method="post" action="{% url 'create' %}">
+        {% csrf_token %}
+        <label for="paragraph">Enter your text:</label>
+        <textarea id="paragraph" name="paragraph" rows="10" cols="50"></textarea><br><br>
+            <button type="submit" class="btn btn-success"style="position: absolute; height: 20vh, width:1vh; background-color: #3e423e; color: white; padding: 10px 20px; 
+            border: none; border-radius: 4px; text-decoration: none; 
+            display: inline-block; cursor: pointer;  
+            position: absolute; outline: none;">Create Post</button>
+        
+    </form>
+    {% endblock %}
+</body>
+</html>
