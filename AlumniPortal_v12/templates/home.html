@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% block title %}Home - KLH Lumni{% endblock %}
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8; /* Light background */
+            color: #333;
+            line-height: 1.6; /* Improve readability */
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase; /* Uppercase heading */
+            letter-spacing: 1px; /* Spacing between letters */
+        }
+
+        /* Container */
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px; /* Add padding for content spacing */
+            background-color: #000000; /* Black background for container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            border-radius: 10px; /* Rounded corners for container */
+        }
+
+        /* New Post Button */
+        .new-post-button {
+            position: relative;
+            padding: 10px 30px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 1.1em; /* Increase button font size */
+            margin-bottom: 20px; /* Spacing below button */
+            display: inline-block; /* Center button */
+        }
+
+        .new-post-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px); /* Button lift on hover */
+        }
+
+        /* Post Box Styling */
+        .post-box {
+            background: #333; /* Black background for post box */
+            color: white; /* White text color */
+            border: 2px solid #3498db; /* Blue outline around the post box */
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            padding: 20px;
+            transition: box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column; /* Change to column for comments section */
+            position: relative; /* Position relative for pseudo elements */
+        }
+
+        .post-box:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .post-box p {
+            margin: 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        /* Comment Section */
+        .comment-input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px; /* Margin above input */
+            display: none; /* Hide input by default */
+        }
+
+        .comment-display {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #000000; /* Set comment text color to black */
+        }
+
+        /* Floating Notification */
+        .floating-notification {
+            position: fixed;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: opacity 0.5s ease;
+            opacity: 1;
+            z-index: 1000;
+            display: none; /* Keep it hidden by default */
+        }
+
+        /* Like and Delete Buttons */
+        .action-buttons {
+            margin-top: 10px; /* Add margin for action buttons */
+            display: flex;
+            align-items: center; /* Align items vertically */
+        }
+
+        .action-buttons button {
+            background-color: #e74c3c; /* Delete button color */
+            color: white;
+            border: none;
+            border-radius: 20px; /* Rounded buttons */
+            padding: 8px 12px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            font-size: 0.9em; /* Smaller font size for buttons */
+        }
+
+        .action-buttons .like-button {
+            background-color: #3498db; /* Like button color */
+        }
+
+        .action-buttons button:hover {
+            opacity: 0.85; /* Button hover effect */
+        }
+
+        /* Container for post boxes */
+        #displayArea {
+            padding: 20px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .post-box {
+                flex-direction: column; /* Stack items vertically on small screens */
+            }
+
+            .new-post-button {
+                width: 100%; /* Full-width button on small screens */
+                margin-bottom: 20px; /* Spacing for small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% block content %}
+        <h1>Welcome to KLH - lumni</h1>
+        
+        <a href="{% url 'newpost' %}">
+            <button type="button" class="btn btn-success" style="background-color: #3e423e; color: white; padding: 10px 20px; 
+                border: none; border-radius: 4px; text-decoration: none; 
+                display: inline-block; cursor: pointer; right: 10px; top: 100px; 
+                position: absolute; outline: none;">New Post</button>
+        </a>
+        
+        <h1>Recent Posts</h1>
+        <div id="displayArea"></div>
+
+        <script>
+            const list = JSON.parse('{{ para|safe }}');
+            let formattedList = '';
+
+            list.forEach((item) => {
+                formattedList += `
+                    <div class="post-box">
+                        <p>${item}</p>
+                        <h4>Comments:</h4>
+                        <div class="comment-display"></div>
+                        <input type="text" class="comment-input" placeholder="Drop a comment..." />
+                        <div class="action-buttons">
+                            <span class="like-count">0</span> &nbsp;
+                            <span> Likes </span> <!-- Likes label -->
+                            <button class="like-button">Like</button> 
+                            <button class="comment-button">Comment</button>
+                        </div>
+                    </div>`;
+            });
+
+            document.getElementById('displayArea').innerHTML = formattedList;
+
+            // Add functionality for buttons
+            document.querySelectorAll('.comment-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const postBox = this.closest('.post-box'); // Get the nearest post box
+                    const commentInput = postBox.querySelector('.comment-input');
+                    commentInput.style.display = commentInput.style.display === 'none' ? 'block' : 'none'; // Toggle visibility
+                    
+                    // Clear previous event listeners to prevent duplication
+                    commentInput.removeEventListener('keydown', handleCommentSubmission);
+                    commentInput.addEventListener('keydown', handleCommentSubmission);
+                });
+            });
+
+            function handleCommentSubmission(event) {
+                const commentInput = event.target;
+                const postBox = commentInput.closest('.post-box');
+                const commentDisplay = postBox.querySelector('.comment-display');
+                
+                if (event.key === 'Enter' && commentInput.value.trim()) {
+                    const newComment = document.createElement('div');
+                    newComment.textContent = commentInput.value;
+                    commentDisplay.appendChild(newComment);
+                    commentInput.value = ''; // Clear input
+                }
+            }
+
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const likeCountSpan = this.previousElementSibling.previousElementSibling; // Get the like count span
+                    let likeCount = parseInt(likeCountSpan.textContent); // Get the current count
+                    if (isNaN(likeCount)) {
+                        likeCount = 0; // Set to 0 if NaN
+                    }
+                    likeCount++; // Increment the count
+                    likeCountSpan.textContent = likeCount; // Update the count displayed
+
+                    // Show floating notification
+                    const notification = document.createElement('div');
+                    notification.textContent = 'You liked this post!';
+                    notification.className = 'floating-notification';
+                    document.body.appendChild(notification);
+
+                    // Position the notification above the button
+                    const buttonRect = this.getBoundingClientRect();
+                    notification.style.left = `${buttonRect.left + buttonRect.width / 2 - 50}px`;
+                    notification.style.top = `${buttonRect.top - 50}px`;
+                    notification.style.display = 'block'; // Make it visible
+
+                    // Fade out the notification
+                    setTimeout(() => {
+                        notification.style.opacity = '0'; // Fade out
+                        setTimeout(() => {
+                            document.body.removeChild(notification); // Remove from DOM
+                        }, 500); // Wait for fade out duration
+                    }, 2000); // Wait before fading out
+                });
+            });
+        </script>
+        {% endblock %}
+    </div>
+</body>
+</html>

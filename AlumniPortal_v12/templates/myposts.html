@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}My Posts{% endblock %}
+
+{% block content %}
+<h1>My Posts:</h1>
+<a href="{% url 'newpost' %}">
+    <button type="button" class="btn btn-success" style="background-color: #3e423e; color: white; padding: 10px 20px; 
+        border: none; border-radius: 4px; text-decoration: none; 
+        display: inline-block; cursor: pointer; right: 10px; top: 100px; 
+        position: absolute; outline: none;">New Post</button>
+</a>
+
+<div id="displayArea"></div>
+
+<script>
+    const list = JSON.parse('{{ para|safe }}');  
+    const displayArea = document.getElementById('displayArea');
+
+    // Clear any previous posts displayed
+    displayArea.innerHTML = '';
+
+    // Loop through posts and create post boxes
+    list.forEach((item, index) => {
+        const postBox = document.createElement('div');
+        postBox.className = 'post-box';
+        postBox.innerHTML = `
+            <p class="post-content">${item}</p> <!-- Add a class for easy access -->
+            <h4>Comments:</h4>
+            <div class="comment-display"></div>
+            <input type="text" class="comment-input" style="display: none;" placeholder="Drop a comment..." />
+            <div class="action-buttons">
+                <span class="like-count">0</span> &nbsp;
+                <span> Likes </span>
+                <button class="like-button">Like</button> 
+                <button class="comment-button">Comment</button>
+                <button class="edit-button">Edit</button> <!-- New Edit button -->
+                <button class="delete-button" data-index="${index}">Delete</button>
+            </div>
+        `;
+        displayArea.appendChild(postBox);
+
+        // Like button functionality
+        postBox.querySelector('.like-button').addEventListener('click', function() {
+            const likeCountSpan = postBox.querySelector('.like-count'); // Get the like count span
+            let likeCount = parseInt(likeCountSpan.textContent) || 0; // Get the current count or default to 0
+            likeCount++; // Increment the count
+            likeCountSpan.textContent = likeCount; // Update the count displayed
+        });
+
+        // Comment button functionality
+        postBox.querySelector('.comment-button').addEventListener('click', function() {
+            const commentInput = postBox.querySelector('.comment-input');
+            commentInput.style.display = commentInput.style.display === 'none' ? 'block' : 'none'; // Toggle visibility
+            
+            // Clear previous event listeners to prevent duplication
+            commentInput.removeEventListener('keydown', handleCommentSubmission);
+            commentInput.addEventListener('keydown', handleCommentSubmission);
+        });
+
+        // Comment submission function
+        function handleCommentSubmission(event) {
+            const commentInput = event.target;
+            const postBox = commentInput.closest('.post-box');
+            const commentDisplay = postBox.querySelector('.comment-display');
+            
+            if (event.key === 'Enter' && commentInput.value.trim()) {
+                const newComment = document.createElement('div');
+                newComment.textContent = commentInput.value;
+                commentDisplay.appendChild(newComment);
+                commentInput.value = ''; // Clear input
+            }
+        }
+
+        // Edit button functionality
+        postBox.querySelector('.edit-button').addEventListener('click', function() {
+            const postContent = postBox.querySelector('.post-content');
+            const originalContent = postContent.textContent;
+            const editInput = document.createElement('input');
+            editInput.type = 'text';
+            editInput.value = originalContent;
+            postBox.replaceChild(editInput, postContent); // Replace post content with input
+
+            // Add a save button
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'Save';
+            saveButton.className = 'save-button';
+            postBox.querySelector('.action-buttons').insertBefore(saveButton, postBox.querySelector('.delete-button')); // Place before delete button
+
+            // Save functionality
+            saveButton.addEventListener('click', function() {
+                const updatedContent = editInput.value.trim();
+                if (updatedContent) {
+                    postContent.textContent = updatedContent; // Update post content
+                    postBox.replaceChild(postContent, editInput); // Replace input with updated content
+                    postBox.querySelector('.action-buttons').removeChild(saveButton); // Remove save button
+                } else {
+                    alert('Post content cannot be empty'); // Alert for empty content
+                }
+            });
+        });
+
+        // Delete button functionality
+        postBox.querySelector('.delete-button').addEventListener('click', function() {
+            const indexToRemove = this.getAttribute('data-index');
+            // Confirm deletion
+            if (confirm('Are you sure you want to delete this post?')) {
+                // Remove post from display
+                displayArea.removeChild(postBox);
+                // Make an AJAX call to remove from output.csv
+                fetch(`/delete_post/${indexToRemove}/`, { 
+                    method: 'DELETE' 
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Post deleted successfully');
+                    } else {
+                        console.error('Failed to delete the post');
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

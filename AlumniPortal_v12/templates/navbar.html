@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg" style="background-color: #ffffff !important;">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/KLH_Logo.png' %}" alt="Logo" width="100" height="60" class="d-inline-block">
+      KLH-Lumni
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">
+          <img src="{% static 'images/home.png' %}" alt="Home" width="40" height="20" class="d-inline-block">
+          Home
+        </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'posts' %}">
+          <img src="{% static 'images/posts.png' %}" alt="Posts" width="40" height="20" class="d-inline-block">
+          My Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'notifications' %}">
+          <img src="{% static 'images/notifications.png' %}" alt="Notifications" width="40" height="30" class="d-inline-block"> 
+          Notifications </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile' %}">
+          <img src="{% static 'images/profilepic.png' %}" alt="Profile" width="40" height="20" class="d-inline-block">
+          My Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'settings' %}">
+          <img src="{% static 'images/settings.png' %}" alt="Settings" width="40" height="20" class="d-inline-block">
+          Settings
+          </a>
+        </li> 
+      </ul>
+      <form class="d-flex" role="search" style="position: relative; margin-bottom: 10px; right: 100px;">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    </form>
+    
+    <button class="btn btn-outline-success" type="submit" 
+    style="background-color: #3e423e; color: white; padding: 10px 20px; 
+    border: none; border-radius: 4px; text-decoration: none; 
+    display: inline-block; cursor: pointer; right: 5px; top: 10px; 
+    position: absolute; outline: none;">
+        Search
+    </button>
+    
+
+      </form>
+    </div>
+  </div>
+</nav>
+</body>
+</html>
