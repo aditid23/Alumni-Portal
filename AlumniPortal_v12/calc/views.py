@@ -185,26 +185,34 @@ def edit_profile(request):
 
     return render(request, 'users/edit_profile.html', context)
 
+
 @login_required
 def settings(request):
     if request.method == 'POST':
+        # Check if it's the password change request
+        if 'change_password' in request.POST:
+            password_form = PasswordChangeForm(user=request.user, data=request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  # Important to keep the user logged in
+                messages.success(request, 'Your password has been updated!')
+                return JsonResponse({'success': True, 'message': 'Your password has been updated!'})
+            else:
+                return JsonResponse({'success': False, 'errors': password_form.errors})
+
+        # Handle profile update
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        password_form = PasswordChangeForm(user=request.user, data=request.POST)
-
+        
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated!')
+            messages.success(request, 'Your account has been updated!')
             return redirect('settings')
-        
-        if password_form.is_valid():
-            password_form.save()
-            messages.success(request, 'Your password has been updated!')
-            return redirect('settings')
+
     else:
         u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+        p_form = ProfileUpdateForm(instance=request.user)
         password_form = PasswordChangeForm(user=request.user)
 
     context = {
@@ -213,6 +221,20 @@ def settings(request):
         'password_form': password_form,
     }
     return render(request, 'users/settings.html', context)
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.http import JsonResponse
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'errors': form.errors}, status=400)
 
 
 from django.http import JsonResponse

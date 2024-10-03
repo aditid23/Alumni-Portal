@@ -1,0 +1,253 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Settings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+
+        .settings-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #343a40;
+        }
+
+        .form-group legend {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .img-thumbnail {
+            display: block;
+            margin: 20px auto;
+            border-radius: 50%;
+            border: 2px solid #007bff;
+        }
+
+        .btn-primary, .btn-danger {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover, .btn-danger:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-danger:hover {
+            background-color: #d9534f;
+            border-color: #d43f3a;
+        }
+
+        hr {
+            margin: 40px 0;
+        }
+
+        .messages {
+            padding: 10px;
+            margin-bottom: 20px;
+            list-style-type: none;
+            text-align: center;
+        }
+
+        .messages li {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+            margin-right: 10px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        /* Floating notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .notification.success {
+            background-color: #28a745;
+        }
+
+        .notification.error {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Back Button -->
+<div class="text-center mb-4">
+    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+</div>
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="settings-container">
+    <h2>User Settings</h2>
+
+    <!-- Profile Update Form -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend>Edit Profile</legend>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" class="form-control" id="id_username" placeholder="Enter your username" value="{{ user.username }}">
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                <input type="email" name="email" class="form-control" id="id_email" placeholder="Enter your email" value="{{ user.email }}">
+            </div>
+
+            <!-- Profile Picture Upload -->
+            <div class="form-group">
+                <label for="id_image">Profile Picture</label>
+                <input type="file" name="image" class="form-control-file" id="id_image">
+            </div>
+
+            <!-- Display Current Profile Picture -->
+            <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="img-thumbnail" style="width: 150px;">
+
+            <!-- Location Input -->
+            <div class="form-group">
+                <label for="id_location">Location</label>
+                <input type="text" name="location" class="form-control" id="id_location" placeholder="Enter your location" value="{{ user.profile.location }}">
+            </div>
+
+            <!-- Bio Input -->
+            <div class="form-group">
+                <label for="id_bio">Bio</label>
+                <textarea name="bio" class="form-control" id="id_bio" rows="4" placeholder="Write a brief bio">{{ user.profile.bio }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_date_of_birth">Date of Birth</label>
+                <input type="date" name="date_of_birth" class="form-control" id="id_date_of_birth" 
+                       value="{{ user.profile.date_of_birth|date:'Y-m-d' }}">
+            </div>
+
+            <!-- Update Profile Button -->
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </fieldset>
+    </form>
+    
+    <hr>
+
+    <!-- Password Change Form -->
+    <form id="changePasswordForm" method="POST" onsubmit="return changePassword(event)">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend>Change Password</legend>
+            <div class="form-group">
+                <label for="id_old_password">Old Password</label>
+                <input type="password" name="old_password" class="form-control" id="id_old_password" required>
+            </div>
+            <div class="form-group">
+                <label for="id_new_password1">New Password</label>
+                <input type="password" name="new_password1" class="form-control" id="id_new_password1" required>
+            </div>
+            <div class="form-group">
+                <label for="id_new_password2">Confirm New Password</label>
+                <input type="password" name="new_password2" class="form-control" id="id_new_password2" required>
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-danger">Change Password</button>
+    </form>
+    
+</div>
+
+<!-- Floating Notification -->
+<div class="notification" id="notification"></div>
+
+<script src="your-script.js" defer></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function showNotification(message, isSuccess) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = `notification ${isSuccess ? 'success' : 'error'}`;
+        notification.style.display = 'block';
+
+        // Hide the notification after 3 seconds
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+
+    async function changePassword(event) {
+        event.preventDefault(); // Prevent form submission
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest', // To identify AJAX request
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken') // Get CSRF token
+                }
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                showNotification(result.message, true);
+            } else {
+                const error = await response.json();
+                showNotification(error.message, false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showNotification('An unexpected error occurred. Please try again.', false);
+        }
+    }
+</script>
+</body>
+</html>
